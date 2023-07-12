@@ -1,0 +1,31 @@
+.container{
+    display: flex;
+    width: 90%;
+    margin: auto;
+}
+
+.button-group{
+    margin-left: 20px;
+}
+
+.recording-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #8a87be;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+    
+}
+
+.recording-button:disabled {
+    padding: 10px 20px;
+    border: none;
+    background-color: #9191a8;
+    color: #fff;
+    border-radius: 5px;
+    cursor: none;
+    margin: 10px;
+    
+}

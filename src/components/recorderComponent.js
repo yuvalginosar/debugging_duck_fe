@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import RecordRTC, { RecordRTCPromisesHandler } from "recordrtc";
-import { invokeSaveAsDialog } from "recordrtc";
+import  { RecordRTCPromisesHandler } from "recordrtc";
 import axios from 'axios';
+import './recorderComponent.css'
 
 export const useRecorderPermission = (
     recordingType
@@ -10,9 +10,9 @@ export const useRecorderPermission = (
     useEffect(() => {
         getPermissionInitializeRecorder();
     }, []);
+
     const getPermissionInitializeRecorder = async () => {
         let stream = await navigator.mediaDevices.getUserMedia({
-            video: true,
             audio: true,
         });
         let recorder = new RecordRTCPromisesHandler(stream, {
@@ -23,39 +23,46 @@ export const useRecorderPermission = (
     return recorder;
 };
 
-export const AudioRecorder = () => {
-  
+export const AudioRecorder = ({setMessages}) => {
+    const [isStartRecording, setIsStartRecording] = useState(false)
+    const [isStopRecording, setIsStoptRecording] = useState(true)
+
     const recorder = useRecorderPermission("audio");
     const startRecording = async () => {
         recorder.startRecording();
+        setIsStartRecording(!isStartRecording)
+        setIsStoptRecording(!isStopRecording)
     };
 
     const stopRecording = async () => {
         await recorder.stopRecording();
         let audioBlob = await recorder.getBlob();
-    // invokeSaveAsDialog(blob, `random_name.webm`);
         const formData = new FormData();
         let fileName = `${audioBlob}.wav`;
         let file = new File([audioBlob], fileName);
-
         formData.append('audio', file, fileName);
 
         try {
-            const response = await axios.post('http://localhost:8000/chat', formData, {
+            const response = await axios.post('http://localhost:8000/voice', formData, {
             headers: {
                 'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
             },
             });
-        console.log(response)
+        setMessages(response.data)
+        setIsStartRecording(!isStartRecording)
+        setIsStoptRecording(!isStopRecording)
         } catch (error) {
             console.log('Error:', error);
         }
     };
 
   return (
-    <div>
-      <button onClick={startRecording}> Start recording</button>
-      <button onClick={stopRecording}> Stop recording</button>
+    <div className="container">
+        <h3>Record audio prompt:</h3>
+        <div className="button-group">
+            <button className="recording-button" onClick={startRecording} disabled={isStartRecording} > Start recording</button>
+            <button className="recording-button" onClick={stopRecording} disabled={isStopRecording} > Stop recording</button>
+        </div>
     </div>
   );
 };

@@ -1,0 +1,33 @@
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    margin: 10px auto;
+    border: 0.2px solid rgb(184, 181, 181);
+    border-radius: 5px;
+    padding: 5px;
+    font-size: large;
+    font-weight: 400;
+    text-align: left;
+    line-height: 1.5;
+    
+  }
+  
+  .message {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+  }
+  
+  .user {
+    align-self: flex-end;
+    background-color: #3f51b5;
+    color: #fff;
+  }
+  
+  .assistant {
+    align-self: flex-start;
+    background-color: #f1f1f1;
+    color: #333;
+  }
+  
