@@ -6,6 +6,7 @@
 
 .button-group{
     margin-left: 20px;
+    display: flex;
 }
 
 .recording-button {
@@ -22,7 +23,7 @@
 .recording-button:disabled {
     padding: 10px 20px;
     border: none;
-    background-color: #9191a8;
+    background-color: #eeeef5;
     color: #fff;
     border-radius: 5px;
     cursor: none;

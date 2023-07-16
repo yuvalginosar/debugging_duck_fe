@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import  { RecordRTCPromisesHandler } from "recordrtc";
 import axios from 'axios';
-import './recorderComponent.css'
+import './recorderComponent.css';
+import { ColorRing } from  'react-loader-spinner';
 
-export const useRecorderPermission = (
-    recordingType
-) => {
+export function useRecorderPermission(recordingType){
     const [recorder, setRecorder] = useState();
     useEffect(() => {
         getPermissionInitializeRecorder();
@@ -23,9 +22,10 @@ export const useRecorderPermission = (
     return recorder;
 };
 
-export const AudioRecorder = ({setMessages}) => {
+export function AudioRecorder ({setMessages}){
     const [isStartRecording, setIsStartRecording] = useState(false)
     const [isStopRecording, setIsStoptRecording] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
 
     const recorder = useRecorderPermission("audio");
     const startRecording = async () => {
@@ -35,6 +35,7 @@ export const AudioRecorder = ({setMessages}) => {
     };
 
     const stopRecording = async () => {
+        setIsLoading(true)
         await recorder.stopRecording();
         let audioBlob = await recorder.getBlob();
         const formData = new FormData();
@@ -48,6 +49,7 @@ export const AudioRecorder = ({setMessages}) => {
                 'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
             },
             });
+        setIsLoading(false)
         setMessages(response.data)
         setIsStartRecording(!isStartRecording)
         setIsStoptRecording(!isStopRecording)
@@ -61,7 +63,18 @@ export const AudioRecorder = ({setMessages}) => {
         <h3>Record audio prompt:</h3>
         <div className="button-group">
             <button className="recording-button" onClick={startRecording} disabled={isStartRecording} > Start recording</button>
-            <button className="recording-button" onClick={stopRecording} disabled={isStopRecording} > Stop recording</button>
+            {!!!isLoading ? <button className="recording-button" onClick={stopRecording} disabled={isStopRecording} > Stop recording</button>
+                :
+                <ColorRing
+                        visible={true}
+                        height="80"
+                        width="80"
+                        ariaLabel="blocks-loading"
+                        wrapperStyle={{}}
+                        wrapperClass="blocks-wrapper"
+                        colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                    />
+                }
         </div>
     </div>
   );

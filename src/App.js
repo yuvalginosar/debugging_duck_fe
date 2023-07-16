@@ -1,6 +1,6 @@
 import { AudioRecorder } from "./components/recorderComponent";
 import ChatMessages from "./components/chatMessages";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TextComponent from "./components/textMessage";
 import './App.css'
 import axios from 'axios';
@@ -11,7 +11,6 @@ function App() {
   function changeMessagesHistory(msg){
     setMessages(msg)
   }
-
 
   const handleClearMessages = async () => {
     try {
@@ -29,7 +28,7 @@ function App() {
         <AudioRecorder setMessages={changeMessagesHistory}/>
       </div>
       <div className="text-area-container">
-        <TextComponent setMessages={changeMessagesHistory}/>
+        <TextComponent setMessages={changeMessagesHistory} />
       </div>
       <button className="clear-btn" onClick={handleClearMessages}>
         Clear Chat History
